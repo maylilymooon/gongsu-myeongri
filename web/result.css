@@ -1,0 +1,505 @@
+/* =========================================================
+   결과 페이지 v2 — 섹션 순서·TOP 5·접기·카드 구분·계산/창작 표시
+   (메인 디자인과 색은 styles.css 를 그대로 따른다)
+   ========================================================= */
+.result-page { padding-top: 6px; }
+.basis-legend {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+  font-size: 12.5px; color: var(--ink-faint); margin-bottom: 26px;
+  padding: 10px 14px; border-radius: 12px; background: rgba(6, 8, 20, 0.45); box-shadow: inset 0 0 0 1px var(--line-soft);
+}
+.basis-legend span:not(.basis-badge) { margin-right: 10px; }
+.basis-badge {
+  display: inline-flex; align-items: center; gap: 4px; flex: none;
+  font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; padding: 3px 9px; border-radius: 99px; white-space: nowrap;
+  font-family: var(--sans);
+}
+.basis-badge.calc { color: #a9d8f2; background: rgba(143, 179, 240, 0.12); box-shadow: inset 0 0 0 1px rgba(143, 179, 240, 0.45); }
+.basis-badge.made { color: var(--cinnabar-200); background: rgba(212, 112, 95, 0.14); box-shadow: inset 0 0 0 1px rgba(212, 112, 95, 0.5); }
+
+.r-sec { margin-bottom: 64px; scroll-margin-top: 90px; }
+.sec-head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.sec-num { font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--gold); letter-spacing: 0.06em; width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--gold); }
+.sec-title { flex: 1; min-width: 0; }
+.sec-title h2 { font-family: var(--serif); font-size: clamp(20px, 2.6vw, 25px); margin: 0; line-height: 1.3; }
+.sec-title p { margin: 2px 0 0; font-size: 13.5px; color: var(--ink-faint); }
+@media (max-width: 520px) { .sec-head { flex-wrap: wrap; gap: 10px 12px; } .sec-head .basis-badge { margin-left: 52px; } }
+
+/* ---------- 메인 캐릭터 카드: 속성 카드(.tarot)와 다른 아치형·이중 금테·낙관 ---------- */
+.result-hero { grid-template-columns: minmax(240px, 320px) 1fr; }
+.hero-card { width: 100%; max-width: 320px; justify-self: center; }
+.hero-card-frame {
+  position: relative; padding: 22px 20px 26px; text-align: center;
+  border-radius: 160px 160px 22px 22px;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(138, 111, 209, 0.55), transparent 60%),
+    linear-gradient(180deg, #2a1a52, #120c2a 80%);
+  box-shadow:
+    0 0 0 1px var(--gold), 0 0 0 6px var(--navy-950), 0 0 0 7px var(--gold-faint),
+    0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 60px -10px rgba(215, 191, 138, 0.35);
+}
+.hero-card.gong .hero-card-frame {
+  box-shadow:
+    0 0 0 1px var(--gong), 0 0 0 6px var(--navy-950), 0 0 0 7px rgba(185, 161, 240, 0.28),
+    0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 60px -10px rgba(185, 161, 240, 0.4);
+}
+.hero-card.gong .hc-corner { border-color: var(--gong); }
+.hero-card.gong .hc-label { color: var(--purple-200); }
+.hero-card.reverse .hero-card-frame {
+  box-shadow:
+    0 0 0 1px var(--gong), 0 0 0 6px var(--navy-950), 0 0 0 7px rgba(232, 207, 146, 0.45),
+    0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 60px -10px rgba(185, 161, 240, 0.3);
+}
+.hero-card.su .hero-card-frame { background: radial-gradient(120% 80% at 50% 0%, rgba(232, 207, 146, 0.3), transparent 60%), linear-gradient(180deg, #2a1a52, #120c2a 80%); }
+.hc-corner { position: absolute; width: 18px; height: 18px; border-color: var(--gold); border-style: solid; }
+.hc-corner.bl { bottom: 10px; left: 10px; border-width: 0 0 1px 1px; }
+.hc-corner.br { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
+.hc-corner.tl, .hc-corner.tr { display: none; }
+.hc-label { font-family: var(--serif); font-size: 11.5px; letter-spacing: 0.3em; color: var(--gold); margin: 26px 0 8px; }
+.hc-art { position: relative; width: 82%; aspect-ratio: 1; margin: 0 auto; display: grid; place-items: center; }
+.hc-ring { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--gold); animation: spin 120s linear infinite; }
+.hc-emblem { position: relative; width: 58%; height: auto; color: var(--gold-light); stroke-width: 2.2; filter: drop-shadow(0 0 14px rgba(240, 226, 187, 0.45)); }
+.hc-art.el-목 .hc-emblem { color: #d4f0da; filter: drop-shadow(0 0 16px rgba(158, 211, 168, 0.6)); }
+.hc-art.el-화 .hc-emblem { color: #fad3c9; filter: drop-shadow(0 0 16px rgba(241, 160, 143, 0.6)); }
+.hc-art.el-토 .hc-emblem { color: #f4e3bb; filter: drop-shadow(0 0 16px rgba(230, 201, 140, 0.6)); }
+.hc-art.el-금 .hc-emblem { color: #f6f3fa; filter: drop-shadow(0 0 16px rgba(229, 225, 234, 0.6)); }
+.hc-art.el-수 .hc-emblem { color: #cfdffb; filter: drop-shadow(0 0 16px rgba(143, 179, 240, 0.65)); }
+.hc-seal {
+  position: absolute; right: 2%; bottom: 4%; min-width: 46px; height: 46px; padding: 0 6px; border-radius: 10px;
+  display: grid; place-items: center; font-family: var(--serif); font-weight: 900; font-size: 20px;
+  color: #1a1033; background: linear-gradient(135deg, #e3d8fd, #8a6fd1); box-shadow: 0 0 0 2px var(--navy-950), 0 0 0 3px #8a6fd1;
+  transform: rotate(-8deg);
+}
+.hc-seal.su { background: linear-gradient(135deg, #f0e2bb, #c99a52); box-shadow: 0 0 0 2px var(--navy-950), 0 0 0 3px var(--gold); color: #2a0f1a; }
+.hc-seal.reverse { font-size: 16px; background: linear-gradient(135deg, #b9a1f0, #f0e2bb); color: #1a1033; }
+.hc-name { font-family: var(--serif); font-weight: 900; font-size: 30px; margin-top: 10px; color: var(--gold-light); letter-spacing: 0.04em; line-height: 1.2; }
+.hc-sub { font-size: 13px; color: var(--ink-dim); letter-spacing: 0.08em; margin-top: 4px; }
+.hero-quote { font-family: var(--serif); font-size: 16px; color: var(--ink-dim); margin: -6px 0 18px; line-height: 1.8; }
+@media (max-width: 760px) {
+  .result-hero { grid-template-columns: 1fr; }
+  .hero-card { max-width: 260px; }
+  .hc-name { font-size: 26px; }
+}
+
+/* ---------- 속성 카드 문양 ---------- */
+.tarot-emblem { position: absolute; inset: 0; display: grid; place-items: center;
+  background: radial-gradient(circle at 50% 45%, rgba(240, 226, 187, 0.12), transparent 62%); }
+.tarot-emblem .emblem { width: 64%; height: auto; color: var(--gold-light); filter: drop-shadow(0 0 8px rgba(240, 226, 187, 0.35)); }
+.tarot-emblem.el-목 .emblem { color: #c8ecd0; } .tarot-emblem.el-화 .emblem { color: #f6c4b8; }
+.tarot-emblem.el-토 .emblem { color: #f0dcae; } .tarot-emblem.el-금 .emblem { color: #f2eff6; } .tarot-emblem.el-수 .emblem { color: #c1d6fa; }
+.tarot-emblem.tone-created .emblem { color: var(--cinnabar-200); }
+.card-row-wrap { margin-top: 34px; }
+.card-row-title { font-family: var(--serif); font-size: 15px; color: var(--gold-light); margin-bottom: 12px; }
+.card-row { display: grid; grid-template-columns: repeat(5, minmax(0, 150px)); gap: 14px; }
+.tarot.mini { padding: 5px; border-radius: 11px; aspect-ratio: 2 / 3; }
+.tarot.mini .tarot-inner { border-radius: 7px; }
+.tarot.mini .tarot-top { font-size: 9.5px; padding: 6px 2px 4px; }
+.tarot.mini .tarot-bottom { padding: 5px 4px 8px; }
+.tarot.mini .tarot-bottom strong { font-size: 14px; }
+.tarot.mini .tarot-bottom span { font-size: 9.5px; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 640px) {
+  .card-row { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 112px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x mandatory; }
+  .card-row .tarot { scroll-snap-align: start; }
+}
+
+/* ---------- TOP 5 ---------- */
+.top5-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 820px) { .top5-grid { grid-template-columns: 1fr; } }
+.top5-head { display: flex; gap: 14px; align-items: center; margin-bottom: 18px; }
+.top5-head h3 { margin: 0; }
+.top5-head .faint { margin: 2px 0 0; font-size: 13px; }
+.top5-seal { width: 44px; height: 44px; flex: none; border-radius: 12px; display: grid; place-items: center; font-family: var(--serif); font-weight: 900; font-size: 22px; }
+.top5.gong .top5-seal { color: var(--gong); box-shadow: inset 0 0 0 1px var(--gong); background: rgba(185, 161, 240, 0.1); }
+.top5.su .top5-seal { color: var(--su); box-shadow: inset 0 0 0 1px var(--su); background: rgba(232, 207, 146, 0.1); }
+a.bar-row { grid-template-columns: minmax(7.5em, 10em) 1fr 3em; text-decoration: none; color: inherit; padding: 4px 6px; margin: -4px -6px; border-radius: 8px; transition: background 0.15s; }
+a.bar-row:hover { background: var(--gold-ghost); }
+.bar-row .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-row .name em { font-style: normal; font-family: var(--sans); font-size: 10.5px; padding: 1px 6px; border-radius: 99px; vertical-align: 2px; margin-left: 4px; }
+.bar-row .name em.mine { background: var(--gold); color: #1b1330; font-weight: 800; }
+.bar-row .name em.combo-mark { color: var(--gold); border: 1px dashed var(--gold); }
+.bar-track, .bar-fill { display: block; }
+.bar-fill.gong { background: linear-gradient(90deg, rgba(74, 47, 138, 0.8), var(--gong)); }
+.bar-fill.su { background: linear-gradient(90deg, rgba(166, 140, 88, 0.6), var(--su)); }
+.bar-row.top .bar-fill { background: linear-gradient(90deg, var(--gold-deep), var(--gold-light)); box-shadow: 0 0 12px rgba(240, 226, 187, 0.5); }
+.more-list { margin-top: 14px; }
+.more-list .bars { margin-top: 12px; }
+.section-foot { text-align: right; margin: 14px 0 0; font-size: 14px; }
+.section-foot a { color: var(--gold); text-underline-offset: 3px; }
+
+/* ---------- 핵심 문장 + 상세 풀이 보기 ---------- */
+.reading-block p.core, p.core { color: var(--ink); }
+details.more { margin-top: 4px; }
+details.more > summary {
+  list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13.5px; font-weight: 600; color: var(--gold); padding: 4px 0;
+}
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::after { content: "▾"; font-size: 11px; transition: transform 0.2s; }
+details.more[open] > summary::after { transform: rotate(180deg); }
+details.more .when-open { display: none; }
+details.more[open] .when-open { display: inline; }
+details.more[open] .when-closed { display: none; }
+.more-body { margin-top: 8px; padding-left: 14px; border-left: 1px solid var(--gold-faint); }
+.more-body p { color: var(--ink-dim); }
+
+/* ---------- 운명의 상대 ---------- */
+.match-panel { display: grid; grid-template-columns: 170px 1fr; gap: 28px; align-items: center; }
+.match-panel .tarot { width: 170px; }
+.match-title { font-family: var(--serif); font-weight: 900; font-size: clamp(24px, 3.4vw, 32px); line-height: 1.25; }
+.match-title .side-gong { color: var(--gong); } .match-title .side-su { color: var(--su); }
+.match-title .swap { color: var(--ink-faint); font-weight: 400; font-size: 0.6em; margin: 0 0.25em; }
+.match-head { font-family: var(--serif); color: var(--gold-light); margin: 6px 0 10px; }
+.match-text { color: var(--ink-dim); margin: 0 0 14px; font-size: 16px; line-height: 1.85; }
+@media (max-width: 560px) {
+  .match-panel { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .match-panel .tarot { width: 150px; }
+  .match-panel .chips { justify-content: center; }
+}
+
+/* ---------- 상세 명식 ---------- */
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.panel-head h3 { margin: 0; }
+.panel-head + .faint { margin: 4px 0 18px; font-size: 13.5px; }
+.made-line { margin-top: 16px; }
+.made-line .basis-badge { margin-right: 6px; vertical-align: 1px; }
+.analysis-grid { grid-template-columns: 1fr 1fr; }
+@media (max-width: 860px) { .analysis-grid { grid-template-columns: 1fr; } }
+.five { grid-template-columns: minmax(140px, 200px) 1fr; }
+.five ul { width: 100%; }
+table.kv th { width: 26%; }
+table.kv td:last-child { width: 1%; white-space: nowrap; text-align: right; }
+@media (max-width: 520px) {
+  table.kv th { width: 30%; }
+  table.kv td:last-child .basis-badge { font-size: 10px; padding: 2px 6px; }
+  .five { grid-template-columns: 1fr; }
+}
+
+/* ---------- 속성 카드 본문 ---------- */
+.motif { display: block; font-size: 12px; color: var(--ink-faint); letter-spacing: 0.04em; margin-bottom: 2px; }
+.cover-ref { display: flex; gap: 10px; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line-soft); font-size: 12.5px; }
+.cover-ref img { width: 42px; height: 58px; object-fit: cover; object-position: top; border-radius: 4px; flex: none; box-shadow: 0 0 0 1px var(--line); }
+.cover-ref div { display: grid; line-height: 1.45; min-width: 0; }
+.cover-ref span { color: var(--gold); font-size: 11.5px; }
+.cover-ref a { color: var(--ink); text-underline-offset: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cover-ref small { color: var(--ink-faint); }
+.cover-ref.none { color: var(--ink-faint); display: block; }
+.attr-card.focus { box-shadow: 0 0 0 2px var(--gold), 0 0 40px -6px rgba(215, 191, 138, 0.6); }
+
+/* ---------- 본명 대사 (대표 유형 영역) ---------- */
+.honmyeong {
+  position: relative; margin: 4px 0 20px; padding: 18px 22px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(74, 47, 138, 0.42), rgba(16, 22, 58, 0.55));
+  box-shadow: inset 0 0 0 1px var(--gold-faint), 0 12px 32px -18px rgba(0, 0, 0, 0.8);
+}
+.honmyeong::before { /* 왼쪽 금색 띠 */
+  content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 3px;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold-deep));
+}
+.hm-label { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 13px; color: var(--ink-dim); margin-bottom: 8px; }
+.hm-hanja { font-family: var(--serif); font-weight: 700; color: var(--gold); letter-spacing: 0.24em; }
+.hm-label .basis-badge { font-size: 10.5px; padding: 2px 8px; }
+.hm-line {
+  margin: 0; font-family: var(--serif); font-weight: 700; line-height: 1.55;
+  font-size: clamp(19px, 2.6vw, 25px); color: var(--gold-light);
+  text-shadow: 0 0 22px rgba(240, 226, 187, 0.18);
+  word-break: keep-all; overflow-wrap: anywhere;
+}
+.hm-note { margin: 10px 0 0; font-size: 13.5px; line-height: 1.6; color: var(--ink-faint); }
+.hm-src { white-space: nowrap; color: var(--ink-dim); margin-left: 4px; }
+@media (max-width: 760px) {
+  .honmyeong { text-align: left; padding: 16px 18px 14px; }
+  .hm-line { font-size: 19px; }
+}
+
+/* =========================================================
+   결과 v3 — 캐릭터 → 속성 → 운명의 상대 → 상세 풀이(접힘)
+   금색 강조는 유형명·퍼센트·본명 대사에만
+   ========================================================= */
+.result-page .r-sec { margin-bottom: 56px; }
+.result-hero { gap: 44px; }
+.result-hero-text .result-meta { font-size: 13.5px; }
+.result-title { margin: 6px 0 10px; }
+.type-pct { margin-bottom: 4px; }
+.type-pct .label { font-size: 17px; color: var(--ink-dim); }
+.honmyeong { margin: 22px 0 0; padding: 22px 24px 20px; }
+.hm-label { font-size: 12.5px; margin-bottom: 10px; color: var(--ink-faint); }
+.hm-line { font-size: clamp(21px, 2.8vw, 28px); }
+.hm-note { margin-top: 12px; font-size: 15px; color: var(--ink-dim); font-family: var(--serif); }
+@media (max-width: 760px) {
+  .result-hero { gap: 22px; }
+  .hero-card { max-width: 280px; }
+  .honmyeong { text-align: center; padding: 20px 18px 18px; }
+  .honmyeong::before { display: none; }
+  .hm-label { justify-content: center; }
+  .hm-line { font-size: 20px; }
+}
+
+/* 02 속성 */
+.traits { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
+.trait {
+  display: grid; grid-template-columns: 108px 1fr; gap: 16px; align-items: center;
+  padding: 14px; border-radius: 16px; background: rgba(6, 8, 20, 0.38); box-shadow: inset 0 0 0 1px var(--line-soft);
+}
+.trait .tarot { width: 108px; }
+.trait-kicker { font-size: 11.5px; letter-spacing: 0.2em; color: var(--ink-faint); }
+.trait h3 { font-family: var(--serif); font-size: 19px; margin: 1px 0 4px; line-height: 1.3; }
+.trait h3 a { text-decoration: none; color: var(--ink); }
+.trait h3 a:hover { color: var(--gold-light); }
+.trait-sum { margin: 0 0 6px; font-size: 14px; color: var(--ink-dim); }
+.trait-line { margin: 0; font-family: var(--serif); font-size: 15px; line-height: 1.6; color: var(--ink); }
+.trait-desc { margin: 0; font-size: 13.5px; line-height: 1.6; color: var(--ink-faint); }
+@media (max-width: 520px) {
+  .traits { grid-template-columns: 1fr; }
+  .trait { grid-template-columns: 88px 1fr; gap: 12px; padding: 12px; }
+  .trait .tarot { width: 88px; }
+  .trait .tarot.mini .tarot-top { font-size: 8px; letter-spacing: 0.2em; }
+  .trait .tarot.mini .tarot-bottom strong { font-size: 12.5px; }
+}
+.more-traits { margin-top: 16px; }
+.more-lead { margin: 8px 0 14px; font-size: 13.5px; color: var(--ink-faint); }
+
+/* 03 운명의 상대 */
+.match-line { margin: 10px 0 0; font-family: var(--serif); font-weight: 700; font-size: clamp(17px, 2.2vw, 20px); line-height: 1.55; color: var(--ink); }
+.match-note { margin: 8px 0 12px; font-size: 14.5px; color: var(--ink-dim); }
+.match-text { font-size: 15px; color: var(--ink-faint); margin: 0; }
+.cliche { margin-top: 16px; }
+.cliche-title { font-family: var(--serif); font-size: 15px; color: var(--ink-dim); margin-bottom: 10px; }
+
+/* 04 상세 풀이 (아코디언) */
+details.deep > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  padding: 18px 20px; border-radius: 16px; background: rgba(6, 8, 20, 0.45); box-shadow: inset 0 0 0 1px var(--line);
+}
+details.deep > summary::-webkit-details-marker { display: none; }
+.deep-title { flex: 1; min-width: 200px; display: grid; }
+.deep-title b { font-family: var(--serif); font-size: clamp(19px, 2.4vw, 23px); }
+.deep-title small { font-size: 13px; color: var(--ink-faint); }
+.deep-btn { padding: 9px 18px; border-radius: 99px; font-size: 14px; font-weight: 700; color: var(--gold-light); box-shadow: inset 0 0 0 1px var(--gold-faint); white-space: nowrap; }
+details.deep > summary:hover .deep-btn { background: var(--gold-ghost); }
+details.deep > summary .when-open { display: none; }
+details.deep[open] > summary .when-open { display: inline; }
+details.deep[open] > summary .when-closed { display: none; }
+.deep-body { margin-top: 22px; }
+.deep-body .basis-legend { margin-bottom: 8px; }
+.deep-h { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; font-family: var(--serif); font-size: 18px; margin: 30px 0 12px; color: var(--ink); }
+.deep-body details.basis { margin-top: 20px; }
+.tag-src { margin: 12px 0 0; }
+.tag-src a { color: var(--gold); text-underline-offset: 2px; }
+@media (max-width: 520px) {
+  .deep-btn { width: 100%; text-align: center; }
+}
+.result-foot { max-width: 640px; margin: 24px auto 0; text-align: center; font-size: 13px; color: var(--ink-faint); }
+.result-page .match-panel { grid-template-columns: 160px 1fr; }
+.result-page .match-panel .tarot { width: 160px; }
+@media (max-width: 560px) { .result-page .match-panel { grid-template-columns: 1fr; } .result-page .match-panel .tarot { width: 150px; } }
+@media (max-width: 520px) {
+  .result-page .sec-head { margin-bottom: 14px; padding-bottom: 10px; }
+  .result-hero .hero-card { max-width: 230px; }
+  .result-hero .hc-label { margin: 22px 0 8px; }
+  .result-title { font-size: 30px; }
+  .type-pct .pct { font-size: 44px; }
+}
+
+/* 속성 카드: 설명과 대사 구분 */
+.trait-line { margin-top: 2px; padding-left: 10px; border-left: 2px solid var(--gold-faint); overflow-wrap: anywhere; }
+
+/* 03 運命의 한 장면 */
+.scene {
+  margin: 16px 0 0; padding: 22px 24px 20px; border-radius: 16px;
+  background: linear-gradient(135deg, rgba(74, 47, 138, 0.32), rgba(16, 22, 58, 0.5));
+  box-shadow: inset 0 0 0 1px var(--line-soft);
+}
+.scene-title { font-family: var(--serif); font-size: 15px; color: var(--ink-dim); margin-bottom: 14px; }
+.scene-lines { display: grid; gap: 10px; }
+.scene-line { margin: 0; display: grid; grid-template-columns: 6.2em 1fr; gap: 12px; align-items: baseline; }
+.scene-line .who { font-size: 13px; font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; }
+.scene-line .who.side-gong { color: var(--gong); }
+.scene-line .who.side-su { color: var(--su); }
+.scene-line .say { font-family: var(--serif); font-size: 16.5px; line-height: 1.6; color: var(--ink); }
+.scene-narr { margin: 16px 0 0; padding-top: 14px; border-top: 1px dashed var(--line-soft); font-family: var(--serif); font-size: 15px; line-height: 1.75; color: var(--ink-dim); }
+@media (max-width: 520px) {
+  .scene { padding: 18px 16px 16px; }
+  .scene-line { grid-template-columns: 1fr; gap: 2px; }
+  .scene-line .say { font-size: 15.5px; }
+}
+.scene-title .hm-hanja { letter-spacing: 0.06em; }
+
+/* =========================================================
+   결과 v4 — 속성 카드 2열 · 지표 설명 · 관계 소개 · 상세 풀이 A~E
+   ========================================================= */
+/* 02 속성 카드: PC·태블릿 2열(행 높이 통일), 모바일 1열. 홀수 개면 마지막 카드는 가운데 */
+.traits { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; }
+.traits > .trait:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 7px); }
+@media (max-width: 640px) {
+  .traits { grid-template-columns: 1fr; grid-auto-rows: auto; }
+  .traits > .trait:last-child:nth-child(odd) { width: auto; justify-self: stretch; }
+}
+
+/* 지표 설명 (? 버튼 + 펼침 문단 — 터치에서도 동작) */
+.hint-btn {
+  flex: none; width: 22px; height: 22px; border-radius: 50%; border: 0; padding: 0; cursor: pointer;
+  display: inline-grid; place-items: center; align-self: center;
+  font: 700 12px/1 var(--sans); color: var(--ink-dim); background: rgba(255, 255, 255, 0.06); box-shadow: inset 0 0 0 1px var(--line);
+}
+.hint-btn:hover, .hint-btn[aria-expanded="true"] { color: var(--navy-950); background: var(--gold); box-shadow: none; }
+.hint-pop {
+  margin: 6px 0 4px; padding: 10px 14px; border-radius: 12px; font-size: 13.5px; line-height: 1.65; color: var(--ink-dim);
+  background: rgba(6, 8, 20, 0.6); box-shadow: inset 0 0 0 1px var(--line-soft); text-align: left;
+}
+.hint-pop[hidden] { display: none; }
+.type-pct { align-items: center; }
+.type-pct .label { font-family: var(--serif); font-size: 17px; color: var(--ink-dim); }
+
+/* 03 관계 소개 */
+.match-blurb { margin: 12px 0 0; font-size: 15.5px; line-height: 1.85; color: var(--ink-dim); }
+
+/* 04 상세 풀이 A~E */
+.deep-k {
+  display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; flex: none;
+  font: 700 13px/1 var(--sans); color: var(--gold-light); box-shadow: inset 0 0 0 1px var(--gold-faint);
+}
+.deep-h .hint-btn { margin-left: 2px; }
+.deep-sum { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.deep-sum li { padding: 10px 14px; border-radius: 12px; font-size: 14px; color: var(--ink); background: rgba(6, 8, 20, 0.4); box-shadow: inset 0 0 0 1px var(--line-soft); }
+.deep-sum b { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: 0.1em; color: var(--ink-faint); }
+.ratio-lead { margin: 14px 0 0; font-size: 14.5px; color: var(--ink); }
+.more-reading { margin-top: 14px; }
+@media (max-width: 520px) { .deep-sum { grid-template-columns: 1fr 1fr; } .deep-sum li { padding: 8px 12px; font-size: 13.5px; } }
+
+/* 03 운명의 상대와 이야기하기 (선택형 상황극) */
+.story {
+  margin: 20px 0 0; padding: 26px 26px 24px; border-radius: 16px;
+  background: linear-gradient(160deg, rgba(38, 23, 74, 0.72), rgba(10, 14, 34, 0.78));
+  box-shadow: inset 0 0 0 1px var(--gold-faint);
+}
+.story [hidden] { display: none !important; }
+.story-kicker { margin: 0; font-size: 12.5px; font-weight: 700; letter-spacing: 0.24em; color: var(--gold); }
+.story-title { margin: 6px 0 4px; font-family: var(--serif); font-weight: 900; font-size: clamp(21px, 2.8vw, 26px); line-height: 1.35; color: var(--gold-light); }
+.story-cast { margin: 0; font-size: 13.5px; font-weight: 700; color: var(--ink-dim); }
+.story-cast .x { margin: 0 8px; color: var(--ink-faint); font-weight: 400; }
+.story .side-gong { color: var(--gong); }
+.story .side-su { color: var(--su); }
+.story-setting { margin: 18px 0 0; padding: 14px 16px; border-radius: 12px; background: rgba(6, 8, 20, 0.42); }
+.story-setting p { margin: 0; font-size: 15px; line-height: 1.8; color: var(--ink-dim); }
+.story-setting p + p { margin-top: 6px; }
+.story-beats { display: grid; gap: 10px; margin: 16px 0 0; }
+.story-act { margin: 0; font-family: var(--serif); font-size: 15px; line-height: 1.75; color: var(--ink-dim); }
+.story-line { margin: 0; display: grid; grid-template-columns: 6.2em 1fr; gap: 12px; align-items: baseline; }
+.story-line .who { font-size: 13px; font-weight: 700; white-space: nowrap; }
+.story-line .who small { display: block; font-size: 11px; font-weight: 600; opacity: 0.8; }
+.story-line .say { font-family: var(--serif); font-size: 16.5px; line-height: 1.6; color: var(--ink); overflow-wrap: anywhere; }
+.story-pick { margin: 22px 0 0; padding-top: 18px; border-top: 1px dashed var(--line-soft); display: grid; gap: 10px; }
+.story-q { margin: 0 0 2px; font-family: var(--serif); font-weight: 700; font-size: 16px; color: var(--gold-light); }
+.story-q small { margin-left: 6px; font-family: var(--sans); font-weight: 400; font-size: 12.5px; color: var(--ink-faint); }
+.story-choice {
+  display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start; width: 100%;
+  padding: 14px 16px; border: 0; border-radius: 12px; cursor: pointer; text-align: left;
+  font: inherit; color: var(--ink); background: rgba(16, 22, 58, 0.66);
+  box-shadow: inset 0 0 0 1px var(--line-soft); transition: background 0.15s, box-shadow 0.15s;
+}
+.story-choice:hover { background: rgba(74, 47, 138, 0.38); box-shadow: inset 0 0 0 1px var(--gold-faint); }
+.story-no {
+  display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+  font-size: 13px; font-weight: 700; color: var(--navy-950); background: var(--gold);
+}
+.story-ct { display: grid; gap: 4px; min-width: 0; }
+.story-label { font-size: 15.5px; line-height: 1.6; overflow-wrap: anywhere; }
+.story-say { font-family: var(--serif); font-size: 14.5px; line-height: 1.6; color: var(--ink-dim); overflow-wrap: anywhere; }
+.story-res { margin: 22px 0 0; padding-top: 18px; border-top: 1px dashed var(--line-soft); outline: none; }
+.story-mine { margin: 0; display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start; padding: 12px 14px; border-radius: 12px; font-size: 15px; line-height: 1.6; color: var(--ink); background: rgba(6, 8, 20, 0.42); box-shadow: inset 0 0 0 1px var(--gold-faint); }
+.story-end { margin: 18px 0 0; padding: 14px 16px; border-radius: 12px; font-family: var(--serif); font-size: 15.5px; line-height: 1.8; color: var(--ink); background: var(--gold-ghost); box-shadow: inset 0 0 0 1px var(--gold-faint); }
+.story-end-tag { display: block; margin-bottom: 4px; font-family: var(--sans); font-size: 12px; font-weight: 700; letter-spacing: 0.2em; color: var(--gold); }
+.story-retry { margin-top: 16px; }
+@media (max-width: 520px) {
+  .story { padding: 20px 16px 18px; }
+  .story-setting { padding: 12px 14px; }
+  .story-line { grid-template-columns: 1fr; gap: 2px; }
+  .story-line .who small { display: inline; margin-left: 4px; }
+  .story-line .say { font-size: 15.5px; }
+  .story-choice { padding: 13px 14px; gap: 10px; }
+  .story-label { font-size: 15px; }
+  .story-retry { width: 100%; }
+}
+
+/* 01 내 캐릭터 카드 저장하기 + 미리보기 모달 (web/share-card.js) */
+.card-save { display: flex; justify-content: center; margin-top: 28px; }
+.card-save .btn { gap: 9px; padding: 12px 24px; }
+.card-save .btn svg, .sc-save svg { flex: none; }
+html.sc-lock, html.sc-lock body { overflow: hidden; }
+.sc-modal { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 16px; }
+.sc-modal[hidden] { display: none; }
+.sc-backdrop { position: absolute; inset: 0; background: rgba(4, 6, 16, 0.8); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.sc-panel {
+  position: relative; display: flex; flex-direction: column; width: min(520px, 100%);
+  max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px);
+  border-radius: 20px; outline: none;
+  background: linear-gradient(160deg, rgba(38, 23, 74, 0.97), rgba(10, 14, 34, 0.98));
+  box-shadow: inset 0 0 0 1px var(--gold-faint), 0 30px 80px -20px rgba(0, 0, 0, 0.95);
+}
+.sc-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 14px 10px 22px; }
+.sc-head h2 { margin: 0; font-family: var(--serif); font-size: 19px; color: var(--gold-light); }
+.sc-x { width: 42px; height: 42px; border: 0; border-radius: 50%; background: transparent; color: var(--ink-dim); font-size: 26px; line-height: 1; cursor: pointer; }
+.sc-x:hover { color: var(--ink); background: var(--gold-ghost); }
+.sc-body { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 0 22px; }
+.sc-preview {
+  position: relative; aspect-ratio: 4 / 5; margin: 0 auto; border-radius: 12px; overflow: hidden;
+  width: min(100%, 400px, calc((100vh - 256px) * 0.8)); width: min(100%, 400px, calc((100dvh - 256px) * 0.8)); min-width: 220px;
+  background: var(--navy-900); box-shadow: 0 0 0 1px var(--line-soft), 0 20px 40px -20px rgba(0, 0, 0, 0.9);
+}
+.sc-preview img { display: block; width: 100%; height: 100%; -webkit-touch-callout: default; }
+.sc-preview img[hidden] { display: none; }
+.sc-loading { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 20px; text-align: center; font-size: 14.5px; color: var(--ink-dim); }
+.sc-loading[hidden] { display: none; }
+.sc-note { max-width: 400px; margin: 10px auto 0; font-size: 12.5px; line-height: 1.55; text-align: center; color: var(--ink-faint); }
+.fit-note { margin: -4px 0 14px; font-size: 12.5px; line-height: 1.55; color: var(--ink-faint); }
+.sc-status { min-height: 1em; max-width: 400px; margin: 12px auto 0; font-size: 13px; line-height: 1.6; text-align: center; color: var(--ink-faint); }
+.sc-status:empty { margin-top: 0; }
+.sc-foot { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 16px 22px 20px; }
+.sc-foot .btn { min-width: 140px; }
+.sc-save[disabled], .sc-share[disabled] { opacity: 0.5; cursor: progress; transform: none; }
+.sc-share {
+  color: #fff; background: linear-gradient(135deg, #a58be6, var(--purple-400) 45%, var(--purple-600));
+  box-shadow: 0 8px 28px -10px rgba(138, 111, 209, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.sc-share:hover { transform: translateY(-1px); box-shadow: 0 12px 34px -10px rgba(138, 111, 209, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.35); }
+.sc-foot.share-first .sc-share { order: -1; }
+@media (max-width: 520px) {
+  .sc-modal { padding: 10px; }
+  .sc-panel { max-height: calc(100vh - 20px); max-height: calc(100dvh - 20px); }
+  .sc-body { padding: 0 16px; }
+  .sc-foot { padding: 14px 16px 16px; }
+  .sc-foot .btn { flex: 1; min-width: 0; }
+  .sc-foot .sc-close-btn { flex-basis: 100%; }
+  /* 버튼이 두 줄이 되므로 미리보기 높이를 그만큼 덜 쓴다 */
+  .sc-preview { width: min(100%, 400px, calc((100vh - 330px) * 0.8)); width: min(100%, 400px, calc((100dvh - 330px) * 0.8)); }
+}
+
+/* 공유받은 유형 소개 (#/t/…) */
+.type-page .type-sum { margin: 4px 0 14px; font-family: var(--serif); font-size: 17px; color: var(--gold-light); }
+.type-page .type-match { margin: 14px 0 0; font-size: 15px; line-height: 1.7; color: var(--ink-dim); }
+.type-page .type-match b { color: var(--ink); font-family: var(--serif); }
+.type-page .type-match .side-gong { color: var(--gong); } .type-page .type-match .side-su { color: var(--su); }
+.type-page .type-match .swap { color: var(--ink-faint); font-weight: 400; margin: 0 0.2em; }
+.type-cta { margin-top: 28px; text-align: center; }
+.type-cta p { margin: 0 0 16px; font-size: 15.5px; line-height: 1.8; color: var(--ink-dim); }
+.type-cta .actions { justify-content: center; margin: 0; }
+
+/* 개인정보 처리방침 (#/privacy) */
+.privacy-page { max-width: 860px; padding-top: 24px; padding-bottom: 48px; }
+.privacy-page .pv-date { margin: -4px 0 8px; font-size: 13.5px; color: var(--ink-faint); }
+.pv-sec { margin-top: 18px; }
+.pv-sec h2 { margin: 0 0 12px; font-family: var(--serif); font-size: 19px; color: var(--gold-light); }
+.pv-sec h3 { margin: 18px 0 8px; font-size: 15px; color: var(--ink); }
+.pv-sec p, .pv-sec li { font-size: 15px; line-height: 1.8; color: var(--ink-dim); }
+.pv-sec p { margin: 0 0 8px; }
+.pv-sec ul { margin: 0; padding-left: 20px; }
+.pv-sec b { color: var(--ink); }
+.pv-sec a { color: var(--gold-light); }
+.pv-sec code { font-size: 0.9em; padding: 1px 5px; border-radius: 5px; background: rgba(6, 8, 20, 0.5); color: var(--ink); overflow-wrap: anywhere; }
+.pv-table { overflow-x: auto; margin: 4px 0 10px; -webkit-overflow-scrolling: touch; }
+.pv-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.pv-table th, .pv-table td { padding: 9px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line-soft); color: var(--ink-dim); line-height: 1.65; }
+.pv-table th { color: var(--gold); font-weight: 600; white-space: nowrap; }
+.pv-table td:first-child { color: var(--ink); white-space: nowrap; }
+@media (max-width: 520px) { .pv-table td:first-child { white-space: normal; min-width: 6em; } .pv-sec h2 { font-size: 17.5px; } }
