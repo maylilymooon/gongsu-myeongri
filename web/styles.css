@@ -191,6 +191,10 @@ button, input, select { font: inherit; color: inherit; }
   content: ""; position: absolute; inset: auto 0 0 0; height: 28%; pointer-events: none;
   background: linear-gradient(180deg, transparent, rgba(10, 14, 34, 0.55));
 }
+.hero-couple .hero-credit { /* AI 생성 표시 — 그림 위 오른쪽 아래에 작게 */
+  position: absolute; right: 10px; bottom: 8px; z-index: 1; margin: 0; padding: 2px 8px; border-radius: 999px;
+  font-size: 10.5px; line-height: 1.5; color: rgba(240, 226, 187, 0.85); background: rgba(6, 8, 20, 0.55);
+}
 @media (max-width: 520px) {
   .hero-couple { aspect-ratio: 4 / 3; max-height: none; margin-bottom: 16px; border-radius: 14px; }
   .hero-couple img { object-position: 57% 22%; }
@@ -482,6 +486,7 @@ table.kv th { width: 36%; font-weight: 500; color: var(--ink-faint); }
 .site-footer .container { display: grid; gap: 10px; }
 .site-footer strong { font-family: var(--serif); color: var(--gold); font-size: 15px; letter-spacing: 0.1em; }
 .site-footer ul { margin: 0; padding-left: 18px; }
+.site-footer .footer-note { font-size: 12px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
