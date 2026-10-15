@@ -54,7 +54,7 @@
 
       <section class="panel pv-sec">
         <h2>3. 쿠키와 브라우저 저장소</h2>
-        ${table(["이름","종류","목적","기간"],[["<code>_ga</code>, <code>_ga_40M10S76SM</code>","쿠키 (Google Analytics)","방문자·방문 구분 — 동의한 경우에만 생성","180일"],["<code>gsm-analytics-consent</code>","브라우저 저장소","방문 통계 동의·거부 선택 기억","직접 지울 때까지"],["<code>gsm-my-result</code>","브라우저 저장소 (탭)","내 결과 다시 보기용 생년월일 — 이 기기에만 저장","탭을 닫을 때까지"],["<code>gsm-analytics-seen</code>","브라우저 저장소 (탭)","같은 결과를 두 번 집계하지 않기 위한 표시(생년월일이 아닌 변환값)","탭을 닫을 때까지"],["<code>gsm-entry-referrer</code>","브라우저 저장소 (탭)","첫 화면에서 넘어올 때 유입 사이트 전달","읽는 즉시 삭제"]])}
+        ${table(["이름","종류","목적","기간"],[["<code>_ga</code>, <code>_ga_40M10S76SM</code>","쿠키 (Google Analytics)","방문자·방문 구분 — 동의한 경우에만 생성","180일"],["<code>gsm-analytics-consent</code>","브라우저 저장소","방문 통계 동의·거부 선택 기억","직접 지울 때까지"],["<code>gsm-my-result</code>","브라우저 저장소 (탭)","내 결과 다시 보기용 생년월일 — 이 기기에만 저장","탭을 닫을 때까지"],["<code>gsm-analytics-seen</code>","브라우저 저장소 (탭)","같은 결과를 두 번 집계하지 않기 위한 표시(생년월일이 아닌 변환값)","탭을 닫을 때까지"],["<code>gsm-entry-referrer</code>","브라우저 저장소 (탭)","첫 화면에서 넘어올 때 유입 사이트 전달","읽는 즉시 삭제"],["<code>gsm-ga-debug</code>","브라우저 저장소 (탭)","운영자의 개발·테스트 방문 표시 — 주소에 <code>?ga=debug</code>를 붙여 들어온 경우에만 생성","탭을 닫을 때까지"]])}
         <p>브라우저 저장소의 값은 이용자의 기기에만 있으며 운영자에게 전송되지 않습니다.</p>
       </section>
 
