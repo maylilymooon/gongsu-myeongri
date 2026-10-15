@@ -129,7 +129,7 @@
       <!-- 01 당신의 BL 캐릭터 -->
       <section class="r-sec" id="r-type">
         ${secHead("01","당신의 BL 캐릭터","네 사주에 들어앉은 남자")}
-        <div class="result-hero">
+        <div class="result-hero${posId==="reverse"?" is-reverse":""}">
           ${heroCard(pers,posId)}
           <div class="result-hero-text">
             <div class="result-meta">${y}년 ${mo}월 ${d}일생</div>
@@ -137,6 +137,7 @@
             <div class="type-pct"><span class="label">${esc(typeLabel)} 적합도</span><span class="pct">${m.strength}%</span>${hintBtn("hint-fit",HINT.fit)}</div>
             ${hintPop("hint-fit",HINT.fit)}
             <p class="fit-note">공수명리학 자체 규칙으로 계산한 오락용 지표예요. 통계적 확률이 아니에요.</p>
+            ${st?`<button type="button" class="btn btn-gold story-jump" data-target="story" aria-controls="story">운명의 상대와 대화하기 <span aria-hidden="true">↓</span></button>`:`<button type="button" class="btn btn-gold story-jump" data-target="r-match" aria-controls="r-match">운명의 상대 확인하기 <span aria-hidden="true">↓</span></button>`}
             ${honmyeongLine(r)}
           </div>
         </div>
@@ -154,7 +155,7 @@
       </section>
 
       <!-- 03 운명의 상대 -->
-      <section class="r-sec">
+      <section class="r-sec" id="r-match">
         ${secHead("03","운명의 상대",posId==="reverse"?"공으로 서든 수로 서든, 결국 엮이는 놈":"반대편 자리에서 너를 기다리는 놈")}
         <div class="panel match-panel">
           ${tarot(matchAttr,{sub:matchAttr.name+matchSides.join("·"),href:"#/codex/"+matchAttr.id,sides:matchSides})}
@@ -280,12 +281,12 @@
       </section>
 
       <div class="actions">
-        <button class="btn btn-gold" type="button" id="copy-link">결과 링크 복사</button>
+        <button class="btn btn-gold" type="button" id="copy-link">내 유형 링크 복사</button>
         <a class="btn btn-ghost" href="#/">다른 생년월일 보기</a>
         <a class="btn btn-ghost" href="#/codex">속성 도감</a>
       </div>
       <p class="result-foot">사주 계산을 활용한 창작 BL 캐릭터 테스트예요. 간지 셈만 만세력 규칙을 따르고(연·월은 근사, 시주 제외), 공수·속성·대사는 모두 창작입니다. 등장인물은 모두 성인이며, 진짜 취향과 포지션은 오직 당신만이 정합니다.</p>
-    </div>`;$("#copy-link").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(siteBase()+"#/t/"+pers.id+"-"+posId);toast("결과 링크를 복사했어요 · 생년월일은 들어가지 않아요");ga("track","result_link_copy")}catch(_){toast("주소창의 링크를 복사해 주세요")}});$("#view-result").querySelectorAll(".hint-btn").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();const pop=document.getElementById(b.getAttribute("aria-controls"));if(!pop)return;pop.hidden=!pop.hidden;b.setAttribute("aria-expanded",String(!pop.hidden))}));bindStory($("#view-result"));ga("result",{position:posId,main_type:sides.length>1?`${pers.name}(리버스)`:pers.name+side0,partner_type:matchSides.length>1?`${matchAttr.name}(공·수)`:matchAttr.name+matchSides[0]},r.input);const restart=$("#view-result .actions a[href='#/']");if(restart)restart.addEventListener("click",()=>ga("track","test_restart"));const cardBtn=$("#card-save-btn");if(cardBtn)cardBtn.addEventListener("click",()=>window.ShareCard.open({posId,titles:r.title.split(" ⇄ "),fitLabel:typeLabel,fit:m.strength,line:mainPick?mainPick.line:"",images:sides.map(side=>{const sl=slotFor(pers,side);return{side,src:sl&&sl.ready?sl.file:null}}),fileName:pers.name+sides.join(""),url:location.origin+location.pathname.replace(/(web\/)?(index\.html)?$/,""),me:{name:pers.name,sides},partner:{name:matchAttr.name,sides:matchSides}},cardBtn))}function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove("show"),1800)}const FILTERS=[["all","전체"],["main","메인 포지션"],["personality","성격속성"],["aux","보조속성"],["bonus","창작 보너스"]];let codexFilter="all";function renderCodex(focusId){const all=[...DATA.main.map(a=>Object.assign({layer:"main"},a)),...DATA.personality,...DATA.aux,...DATA.bonus];if(focusId&&all.some(a=>a.id===focusId))codexFilter="all";const list=all.filter(a=>codexFilter==="all"||(a.layer||"main")===codexFilter);$("#view-codex").innerHTML=`<div class="container">
+    </div>`;$("#copy-link").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(siteBase()+"#/t/"+pers.id+"-"+posId);toast("유형 소개 링크를 복사했어요 · 생년월일과 상세 결과는 들어가지 않아요");ga("track","result_link_copy")}catch(_){toast("주소창의 링크를 복사해 주세요")}});$("#view-result").querySelectorAll(".hint-btn").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();const pop=document.getElementById(b.getAttribute("aria-controls"));if(!pop)return;pop.hidden=!pop.hidden;b.setAttribute("aria-expanded",String(!pop.hidden))}));bindStory($("#view-result"));const jump=$("#view-result .story-jump");if(jump)jump.addEventListener("click",()=>{const box=document.getElementById(jump.dataset.target);if(!box)return;const reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;box.scrollIntoView({behavior:reduce?"auto":"smooth",block:"start"});const title=box.querySelector(".story-title, .sec-title h2, h2");if(title){title.setAttribute("tabindex","-1");title.focus({preventScroll:true})}});ga("result",{position:posId,main_type:sides.length>1?`${pers.name}(리버스)`:pers.name+side0,partner_type:matchSides.length>1?`${matchAttr.name}(공·수)`:matchAttr.name+matchSides[0]},r.input);const restart=$("#view-result .actions a[href='#/']");if(restart)restart.addEventListener("click",()=>ga("track","test_restart"));const cardBtn=$("#card-save-btn");if(cardBtn)cardBtn.addEventListener("click",()=>window.ShareCard.open({posId,titles:r.title.split(" ⇄ "),fitLabel:typeLabel,fit:m.strength,line:mainPick?mainPick.line:"",images:sides.map(side=>{const sl=slotFor(pers,side);return{side,src:sl&&sl.ready?sl.file:null}}),fileName:pers.name+sides.join(""),url:location.origin+location.pathname.replace(/(web\/)?(index\.html)?$/,""),me:{name:pers.name,sides},partner:{name:matchAttr.name,sides:matchSides}},cardBtn))}function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove("show"),1800)}const FILTERS=[["all","전체"],["main","메인 포지션"],["personality","성격속성"],["aux","보조속성"],["bonus","창작 보너스"]];let codexFilter="all";function renderCodex(focusId){const all=[...DATA.main.map(a=>Object.assign({layer:"main"},a)),...DATA.personality,...DATA.aux,...DATA.bonus];if(focusId&&all.some(a=>a.id===focusId))codexFilter="all";const list=all.filter(a=>codexFilter==="all"||(a.layer||"main")===codexFilter);$("#view-codex").innerHTML=`<div class="container">
       <div class="eyebrow">屬性圖鑑</div>
       <h1 class="section-title">속성 도감</h1>
       <p class="section-lead">공수명리학이 다루는 서른여섯 장의 카드입니다. 카드 그림 자리에는 속성마다 캐릭터 일러스트가 들어가며(준비 중인 칸은 '일러스트 준비 중'으로 표시), '대표 작품'은 그 태그가 실제로 달린 플랫폼 작품을 제목과 링크로 소개합니다. 리디(R)·봄툰(B)·레진코믹스(L)·미스터블루(M) 표시는 실제로 확인한 키워드이며, 레진은 작품 표본에서만 확인했습니다.</p>
@@ -374,7 +375,7 @@
     </div>`}function renderType(slug){const m=/^([a-z]+)-(gong|su|reverse)$/.exec(slug);const pers=m&&DATA.personality.find(a=>a.id===m[1]);if(!pers){$("#view-type").innerHTML=`<div class="container"><div class="panel type-cta" style="text-align:center"><p>찾을 수 없는 유형 링크예요.</p><a class="btn btn-gold" href="#/">내 공수 팔자 까보기 →</a></div></div>`;return null}const posId=m[2],sides=SIDES_OF[posId];const r=L.compose(DATA,{positionId:posId,personalityId:pers.id,auxIds:[]});const matchAttr=DATA.personality.find(a=>a.id===pers.reading.match.id);const matchSides=posId==="gong"?["수"]:posId==="su"?["공"]:["공","수"];const sk=s=>s==="공"?"gong":"su";const matchLine=window.BLLines&&window.BLLines.of(DATA,matchAttr,matchSides[0]);const label=pers.name+sides.join("·");$("#view-type").innerHTML=`<div class="container result-page type-page">
       <section class="r-sec">
         ${secHead("✦","친구의 BL 캐릭터","공유받은 공수 팔자")}
-        <div class="result-hero">
+        <div class="result-hero${posId==="reverse"?" is-reverse":""}">
           ${heroCard(pers,posId)}
           <div class="result-hero-text">
             <div class="result-meta">친구가 받은 유형</div>

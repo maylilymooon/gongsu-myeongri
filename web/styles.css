@@ -195,6 +195,7 @@ button, input, select { font: inherit; color: inherit; }
   position: absolute; right: 10px; bottom: 8px; z-index: 1; margin: 0; padding: 2px 8px; border-radius: 999px;
   font-size: 10.5px; line-height: 1.5; color: rgba(240, 226, 187, 0.85); background: rgba(6, 8, 20, 0.55);
 }
+@media (min-width: 521px) { .hero-couple .hero-credit { top: 10px; bottom: auto; } } /* PC: 아래쪽 동의 배너와 겹치지 않게 그림 오른쪽 위로 */
 @media (max-width: 520px) {
   .hero-couple { aspect-ratio: 4 / 3; max-height: none; margin-bottom: 16px; border-radius: 14px; }
   .hero-couple img { object-position: 57% 22%; }

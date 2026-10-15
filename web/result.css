@@ -503,3 +503,23 @@ html.sc-lock, html.sc-lock body { overflow: hidden; }
 .pv-table th { color: var(--gold); font-weight: 600; white-space: nowrap; }
 .pv-table td:first-child { color: var(--ink); white-space: nowrap; }
 @media (max-width: 520px) { .pv-table td:first-child { white-space: normal; min-width: 6em; } .pv-sec h2 { font-size: 17.5px; } }
+
+/* ---------- v1.9: 결과 첫 화면에서 상황극(리버스는 운명의 상대)으로 바로 가기 ---------- */
+.story-jump { margin-top: 4px; padding: 11px 24px; font-size: 15px; }
+.story, #r-match { scroll-margin-top: 84px; }
+@media (max-width: 760px) {
+  /* 모바일: 적합도 → 설명 → 버튼 순서 그대로, 설명과 버튼 사이를 한 칸 띄워 버튼의 주석처럼 보이지 않게 */
+  .result-hero-text .story-jump { display: flex; justify-content: center; width: 100%; max-width: 320px; margin: 6px auto 0; padding: 10px 20px; }
+  .story, #r-match { scroll-margin-top: 104px; }
+}
+
+/* ---------- v1.8: 리버스 결과 카드 — 두 인물이 들어가므로 공·수 카드보다 넓게 ---------- */
+.result-hero.is-reverse { grid-template-columns: minmax(300px, 460px) 1fr; }
+.result-hero.is-reverse .hero-card { max-width: 460px; }
+@media (max-width: 760px) {
+  .result-hero.is-reverse { grid-template-columns: 1fr; }
+  .result-hero.is-reverse .hero-card { max-width: 360px; }
+}
+@media (max-width: 520px) { .result-hero.is-reverse .hero-card { max-width: 340px; } }
+/* 이동 후 제목에 준 초점은 화면 낭독기용 — 마우스·터치로 왔을 때 테두리는 숨김 */
+.story-title[tabindex="-1"]:focus:not(:focus-visible), #r-match h2[tabindex="-1"]:focus:not(:focus-visible) { outline: none; }
