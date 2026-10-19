@@ -377,6 +377,8 @@ details.deep[open] > summary .when-closed { display: none; }
 .story-kicker { margin: 0; font-size: 12.5px; font-weight: 700; letter-spacing: 0.24em; color: var(--gold); }
 .story-title { margin: 6px 0 4px; font-family: var(--serif); font-weight: 900; font-size: clamp(21px, 2.8vw, 26px); line-height: 1.35; color: var(--gold-light); }
 .story-cast { margin: 0; font-size: 13.5px; font-weight: 700; color: var(--ink-dim); }
+.story-scenario-title { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid var(--line-soft); font: 700 18px/1.4 var(--serif); color: var(--ink); overflow-wrap: anywhere; }
+.story-scenario-title + .story-setting { margin-top: 10px; }
 .story-cast .x { margin: 0 8px; color: var(--ink-faint); font-weight: 400; }
 .story .side-gong { color: var(--gong); }
 .story .side-su { color: var(--su); }
@@ -393,7 +395,7 @@ details.deep[open] > summary .when-closed { display: none; }
 .story-q { margin: 0 0 2px; font-family: var(--serif); font-weight: 700; font-size: 16px; color: var(--gold-light); }
 .story-q small { margin-left: 6px; font-family: var(--sans); font-weight: 400; font-size: 12.5px; color: var(--ink-faint); }
 .story-choice {
-  display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start; width: 100%;
+  display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start; width: 100%; min-height: 56px;
   padding: 14px 16px; border: 0; border-radius: 12px; cursor: pointer; text-align: left;
   font: inherit; color: var(--ink); background: rgba(16, 22, 58, 0.66);
   box-shadow: inset 0 0 0 1px var(--line-soft); transition: background 0.15s, box-shadow 0.15s;
@@ -505,11 +507,12 @@ html.sc-lock, html.sc-lock body { overflow: hidden; }
 @media (max-width: 520px) { .pv-table td:first-child { white-space: normal; min-width: 6em; } .pv-sec h2 { font-size: 17.5px; } }
 
 /* ---------- v1.9: 결과 첫 화면에서 상황극(리버스는 운명의 상대)으로 바로 가기 ---------- */
-.story-jump { margin-top: 4px; padding: 11px 24px; font-size: 15px; }
+.conversation-actions { display: flex; flex-wrap: wrap; margin-top: 18px; }
+.conversation-jump { margin: 0; padding: 11px 24px; font-size: 15px; }
 .story, #r-match { scroll-margin-top: 84px; }
 @media (max-width: 760px) {
-  /* 모바일: 적합도 → 설명 → 버튼 순서 그대로, 설명과 버튼 사이를 한 칸 띄워 버튼의 주석처럼 보이지 않게 */
-  .result-hero-text .story-jump { display: flex; justify-content: center; width: 100%; max-width: 320px; margin: 6px auto 0; padding: 10px 20px; }
+  .conversation-actions { justify-content: center; }
+  .conversation-jump { display: flex; justify-content: center; width: 100%; max-width: 320px; padding: 10px 20px; }
   .story, #r-match { scroll-margin-top: 104px; }
 }
 

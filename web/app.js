@@ -68,10 +68,10 @@
       ${col("日柱",p.day.stem,p.day.branch,"day")}
       ${col("月柱",p.month.stem,p.month.branch)}
       ${col("年柱",p.year.stem,p.year.branch)}
-    </div>`}function heroCard(pers,posId){const seal={gong:"攻",su:"受",reverse:"攻受"}[posId];return`<div class="hero-card ${posId}">
+    </div>`}function heroCard(pers,posId,label="本 命"){const seal={gong:"攻",su:"受",reverse:"攻受"}[posId];return`<div class="hero-card ${posId}">
       <div class="hero-card-frame">
         <span class="hc-corner tl"></span><span class="hc-corner tr"></span><span class="hc-corner bl"></span><span class="hc-corner br"></span>
-        <div class="hc-label">本 命</div>
+        <div class="hc-label">${label}</div>
         <div class="hc-art ${posId==="reverse"?"pair":""}">
           ${SIDES_OF[posId].map(side=>illust(slotFor(pers,side),{size:posId==="reverse"?"half":"hero"})).join("")}
           <span class="hc-seal ${posId}">${seal}</span>
@@ -101,21 +101,22 @@
       <figcaption class="scene-title"><span class="hm-hanja">運命</span>의 한 장면</figcaption>
       <div class="scene-lines">${sc.lines.map(l=>`<p class="scene-line"><span class="who side-${sk(l.side)}">${esc(l.who)}</span><span class="say">“${esc(l.text)}”</span></p>`).join("")}</div>
       <p class="scene-narr">${esc(sc.narration)}</p>
-    </figure>`}function storyBlock(st){if(!st)return"";const sk=s=>s==="공"?"gong":"su";const beat=b=>{if(b.act)return`<p class="story-act">${esc(b.act)}</p>`;const mine=b.me!=null;const who=mine?`나 <small>${esc(st.me)}</small>`:esc(st.partner);return`<p class="story-line${mine?" is-me":""}"><span class="who side-${sk(mine?st.side:st.partnerSide)}">${who}</span><span class="say">“${esc(mine?b.me:b.partner)}”</span></p>`};const mySay=c=>c.say?beat({me:c.say}):"";return`<div class="story" id="story">
+    </figure>`}function storyConversationTitle(name){const code=String(name).charCodeAt(String(name).length-1)-44032;return name+(code>=0&&code<=11171&&code%28?"과":"와")+" 이야기하기"}function storyBlock(st){if(!st)return"";const sk=s=>s==="공"?"gong":"su";const beat=b=>{if(b.act)return`<p class="story-act">${esc(b.act)}</p>`;const mine=b.me!=null;const who=mine?`나 <small>${esc(st.me)}</small>`:esc(st.partner);return`<p class="story-line${mine?" is-me":""}"><span class="who side-${sk(mine?st.side:st.partnerSide)}">${who}</span><span class="say">“${esc(mine?b.me:b.partner)}”</span></p>`};const mySay=c=>c.say?beat({me:c.say}):"";return`<div class="story" id="story">
       <div class="story-head">
-        <p class="story-kicker">운명의 상대와 이야기하기</p>
-        <h3 class="story-title">${esc(st.title)}</h3>
+        <p class="story-kicker">이상형과 이야기하기</p>
+        <h3 class="story-title">${esc(storyConversationTitle(st.partner))}</h3>
         <p class="story-cast"><span class="side-${sk(st.side)}">나 · ${esc(st.me)}</span><span class="x">×</span><span class="side-${sk(st.partnerSide)}">${esc(st.partner)}</span></p>
+        <h4 class="story-scenario-title">${esc(st.title)}</h4>
       </div>
       <div class="story-setting">${st.setting.map(t=>`<p>${esc(t)}</p>`).join("")}</div>
       <div class="story-beats">${st.opening.map(beat).join("")}</div>
       <div class="story-pick" role="group" aria-labelledby="story-q">
-        <p class="story-q" id="story-q">당신의 선택은? <small>한 번만 고를 수 있어요</small></p>
-        ${st.choices.map((c,i)=>`<button type="button" class="story-choice" data-choice="${i}"><span class="story-no">${i+1}</span><span class="story-ct"><span class="story-label">${esc(c.label)}</span>${c.say?`<span class="story-say">“${esc(c.say)}”</span>`:""}</span></button>`).join("")}
+        <p class="story-q" id="story-q">당신의 선택은?</p>
+        ${st.choices.map((c,i)=>`<button type="button" class="story-choice" data-choice="${i}"><span class="story-no">${"ABC"[i]}</span><span class="story-ct"><span class="story-label">${esc(c.label)}</span>${c.say?`<span class="story-say">“${esc(c.say)}”</span>`:""}</span></button>`).join("")}
       </div>
       <div class="story-out" aria-live="polite">
         ${st.choices.map((c,i)=>`<div class="story-res" data-for="${i}" tabindex="-1" hidden>
-          <p class="story-mine"><span class="story-no">${i+1}</span><span>${esc(c.label)}</span></p>
+          <p class="story-mine"><span class="story-no">${"ABC"[i]}</span><span>${esc(c.label)}</span></p>
           <div class="story-beats">${mySay(c)}${c.beats.map(beat).join("")}</div>
           <p class="story-end"><span class="story-end-tag">결말</span>${esc(c.ending)}</p>
         </div>`).join("")}
@@ -134,8 +135,8 @@
             <div class="type-pct"><span class="label">${esc(typeLabel)} 적합도</span><span class="pct">${m.strength}%</span>${hintBtn("hint-fit",HINT.fit)}</div>
             ${hintPop("hint-fit",HINT.fit)}
             <p class="fit-note">공수명리학 자체 규칙으로 계산한 오락용 지표예요. 통계적 확률이 아니에요.</p>
-            ${st?`<button type="button" class="btn btn-gold story-jump" data-target="story" aria-controls="story">운명의 상대와 대화하기 <span aria-hidden="true">↓</span></button>`:`<button type="button" class="btn btn-gold story-jump" data-target="r-match" aria-controls="r-match">운명의 상대 확인하기 <span aria-hidden="true">↓</span></button>`}
             ${honmyeongLine(r)}
+            <div class="conversation-actions">${st?`<button type="button" class="btn btn-gold story-jump conversation-jump" data-target="story" aria-controls="story">이상형과 이야기하기 <span aria-hidden="true">↓</span></button>`:`<button type="button" class="btn btn-gold story-jump conversation-jump" data-target="r-match" aria-controls="r-match">운명의 상대 확인하기 <span aria-hidden="true">↓</span></button>`}</div>
           </div>
         </div>
         ${window.ShareCard?`<div class="card-save"><button type="button" class="btn btn-ghost" id="card-save-btn">${window.ShareCard.DL_ICON}<span>내 캐릭터 카드 저장하기</span></button></div>`:""}
@@ -318,7 +319,66 @@
       </div>
       <div class="spread" style="margin-top:22px">
         ${attrCard(main)}${attrCard(pers,{sides})}${c.aux.map(a=>attrCard(a,{sides})).join("")}${c.bonus?attrCard(c.bonus):""}
-      </div>`}function renderAbout(){const P=L.POSITION;const ILL={total:Object.keys(SLOTS).length,ready:Object.values(SLOTS).filter(x=>x.ready).length};const persByEl=EL_ORDER.map(el=>`<tr><td class="el-${el} serif">${EL_HANJA[el]} ${el}</td><td>${DATA.personality.filter(a=>a.element===el).map(a=>esc(a.name)).join(", ")}</td></tr>`).join("");const auxRows=DATA.aux.map(a=>`<tr><td class="serif">${esc(a.branch)}</td><td>${esc(a.name)}</td></tr>`).join("");$("#view-about").innerHTML=`<div class="container">
+      </div>`}const IDEAL=window.BL_IDEAL||{order:[],stories:{}};const josaIeyo=word=>{const c=String(word).charCodeAt(String(word).length-1)-44032;return c>=0&&c<=11171&&c%28?"이에요":"예요"};function idealParts(key){const s=IDEAL.stories[key];if(!s)return null;const ideal=findAttr("personality",s.ideal.id),role=findAttr("personality",s.role.id);if(!ideal||!role||ideal.reading.match.id!==role.id||s.role.side===s.ideal.side)return null;return{key,s,ideal,role}}function renderIdeal(arg,sub){const box=$("#view-ideal");const p=arg?idealParts(arg):null;if(!p){box.innerHTML=idealPickHtml(arg?"찾을 수 없는 이상형이에요. 아래에서 다시 골라 주세요.":"");box.querySelectorAll(".ideal-pick").forEach(a=>a.addEventListener("click",()=>{const q=idealParts(a.dataset.key);if(q)ga("track","ideal_select",{ideal_type:q.s.ideal.name,role_type:q.s.role.name})}));return null}if(sub==="story"){box.innerHTML=idealStoryHtml(p);bindIdealStory(box,p);return p.key+"/story"}box.innerHTML=idealIntroHtml(p);return p.key}function idealPickHtml(notice){const list=IDEAL.order.map(idealParts).filter(Boolean);const credit=list.map(p=>slotFor(p.ideal,p.s.ideal.side)).find(sl=>sl&&sl.ready&&sl.credit);return`<div class="container ideal-page">
+      <div class="eyebrow">理想</div>
+      <h1 class="section-title">이상형 만나기</h1>
+      <p class="section-lead">어떤 이상형을 만나볼까요? 마음이 가는 상대를 골라 주세요. 지금은 세 명의 이상형을 만나볼 수 있어요.</p>
+      ${notice?`<p class="ideal-notice" role="status">${esc(notice)}</p>`:""}
+      <div class="ideal-grid">
+        ${list.map(({key,s,ideal})=>`<a class="ideal-pick" href="#/ideal/${esc(key)}" data-key="${esc(key)}">
+          <div class="ideal-pick-art">${illust(slotFor(ideal,s.ideal.side))}</div>
+          <div class="ideal-pick-text">
+            <div class="ideal-pick-name">${titleHtml([],ideal.name,[s.ideal.side])}</div>
+            <div class="ideal-pick-sum">${esc(ideal.summary)}</div>
+          </div>
+        </a>`).join("")}
+      </div>
+      ${credit?`<p class="ill-credit ideal-credit">캐릭터 일러스트 · ${esc(credit.credit.license)} · ${esc(credit.credit.author)}</p>`:""}
+    </div>`}function idealIntroHtml({key,s,ideal,role}){const side=s.ideal.side,posId=side==="공"?"gong":"su";const me=window.BLLines?window.BLLines.of(DATA,ideal,side):null;const roleNote=window.BLLines?window.BLLines.of(DATA,role,s.role.side):null;return`<div class="container ideal-page result-page">
+      <a class="ideal-back" href="#/ideal">← 다른 이상형 고르기</a>
+      <div class="result-hero ideal-hero">
+        ${heroCard(ideal,posId,"理 想")}
+        <div class="result-hero-text">
+          <div class="result-meta">당신이 고른 이상형</div>
+          <h1 class="result-title">${titleHtml([],ideal.name,[side])}</h1>
+          ${me&&me.note?`<p class="type-sum">${esc(me.note)}</p>`:""}
+          ${me&&me.line?`<figure class="honmyeong"><figcaption class="hm-label"><span class="hm-hanja">本命臺詞</span> · 그의 대표 대사</figcaption><blockquote class="hm-line">“${esc(me.line)}”</blockquote></figure>`:""}
+          ${illustCredit(ideal,[side])}
+        </div>
+      </div>
+      <div class="panel ideal-role">
+        <p class="ideal-role-line">이번 이야기에서 당신은 <b class="side-${s.role.side==="공"?"gong":"su"}">${esc(s.role.name)}</b>${josaIeyo(s.role.name)}.</p>
+        ${roleNote&&roleNote.note?`<p class="ideal-role-sub">${esc(roleNote.note)}</p>`:""}
+        <a class="btn btn-gold" href="#/ideal/${esc(key)}/story">이 상대와 이야기하기 →</a>
+      </div>
+    </div>`}function idealStoryHtml({key,s}){const sk=x=>x==="공"?"gong":"su";const beat=b=>{if(b.act)return`<p class="story-act">${esc(b.act)}</p>`;const mine=b.me!=null;const who=mine?`나 <small>${esc(s.role.name)}</small>`:esc(s.ideal.name);return`<p class="story-line${mine?" is-me":""}"><span class="who side-${sk(mine?s.role.side:s.ideal.side)}">${who}</span><span class="say">“${esc(mine?b.me:b.partner)}”</span></p>`};return`<div class="container ideal-page">
+      <a class="ideal-back" href="#/ideal/${esc(key)}">← ${esc(s.ideal.name)} 소개로</a>
+      <div class="story ideal-story" id="ideal-story">
+        <div class="story-head">
+          <p class="story-kicker">이상형과 이야기하기</p>
+          <h1 class="story-title">${esc(storyConversationTitle(s.ideal.name))}</h1>
+          <p class="story-cast"><span class="side-${sk(s.ideal.side)}">${esc(s.ideal.name)}</span><span class="x">×</span><span class="side-${sk(s.role.side)}">나 · ${esc(s.role.name)}</span></p>
+          <h2 class="story-scenario-title">${esc(s.title)}</h2>
+        </div>
+        <div class="story-setting">${s.setting.map(t=>`<p>${esc(t)}</p>`).join("")}</div>
+        <div class="story-beats">${s.opening.map(beat).join("")}</div>
+        <div class="story-pick" role="group" aria-labelledby="ideal-q">
+          <p class="story-q" id="ideal-q">당신의 선택은?</p>
+          ${s.choices.map(c=>`<button type="button" class="story-choice" data-letter="${esc(c.letter)}"><span class="story-no">${esc(c.letter)}</span><span class="story-ct"><span class="story-label">${esc(c.label)}</span>${c.say?`<span class="story-say">“${esc(c.say)}”</span>`:""}</span></button>`).join("")}
+        </div>
+        <div class="story-out" aria-live="polite">
+          ${s.choices.map(c=>`<div class="story-res" data-for="${esc(c.letter)}" tabindex="-1" hidden>
+            <p class="story-mine"><span class="story-no">${esc(c.letter)}</span><span>${esc(c.label)}</span></p>
+            <div class="story-beats">${c.say?beat({me:c.say}):""}${c.beats.map(beat).join("")}</div>
+            <p class="story-end"><span class="story-end-tag">결말</span>${esc(c.ending)}</p>
+          </div>`).join("")}
+          <div class="ideal-after" hidden>
+            <button type="button" class="btn btn-gold story-retry">다른 선택 해보기</button>
+            <a class="btn btn-ghost" href="#/ideal">다른 이상형 만나기</a>
+          </div>
+        </div>
+      </div>
+    </div>`}function bindIdealStory(root,{s}){const box=$("#ideal-story",root);if(!box)return;const pick=$(".story-pick",box),after=$(".ideal-after",box);const res=[...box.querySelectorAll(".story-res")];let attempt=0;box.querySelectorAll(".story-choice").forEach(b=>b.addEventListener("click",()=>{if(box.dataset.chosen)return;const letter=b.dataset.letter;const el=res.find(x=>x.dataset.for===letter);if(!el)return;box.dataset.chosen=letter;attempt+=1;pick.hidden=true;el.hidden=false;after.hidden=false;ga("idealChoice",{ideal_type:s.ideal.name,role_type:s.role.name,choice:letter,attempt},el.querySelector(".story-end"));el.focus({preventScroll:true});el.scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"})}));$(".story-retry",box).addEventListener("click",()=>{delete box.dataset.chosen;res.forEach(el=>{el.hidden=true});after.hidden=true;pick.hidden=false;pick.scrollIntoView({behavior:reduceMotion?"auto":"smooth",block:"start"});const first=pick.querySelector(".story-choice");if(first)first.focus({preventScroll:true})})}function renderAbout(){const P=L.POSITION;const ILL={total:Object.keys(SLOTS).length,ready:Object.values(SLOTS).filter(x=>x.ready).length};const persByEl=EL_ORDER.map(el=>`<tr><td class="el-${el} serif">${EL_HANJA[el]} ${el}</td><td>${DATA.personality.filter(a=>a.element===el).map(a=>esc(a.name)).join(", ")}</td></tr>`).join("");const auxRows=DATA.aux.map(a=>`<tr><td class="serif">${esc(a.branch)}</td><td>${esc(a.name)}</td></tr>`).join("");$("#view-about").innerHTML=`<div class="container">
       <div class="eyebrow">解釋原理</div>
       <h1 class="section-title">풀이 원리</h1>
       <p class="section-lead">공수명리학은 오락용 풀이입니다. 간지를 세는 셈법(${BADGE.calc})은 만세력 규칙을 따르되 입춘·절입일은 고정 날짜로 근사하고 시주는 계산하지 않으며, 그 값을 공수와 속성으로 옮기는 규칙(${BADGE.made})은 모두 이 서비스가 지어낸 것입니다. 같은 생년월일은 언제나 같은 풀이가 나오도록, 난수 대신 날짜로 만든 고정된 수만 사용합니다.</p>
@@ -398,4 +458,4 @@
       <div>캐릭터 일러스트는 Maylily Moon이 ChatGPT(OpenAI)를 활용해 만든 AI 생성 일러스트입니다.</div>
       <div class="footer-note">공수명리학은 레진코믹스·리디·미스터블루·봄툰과 제휴하거나 후원받지 않는 개인 제작 서비스입니다.</div>
       <div class="footer-links"><a href="#/privacy">개인정보 처리방침</a></div>
-    </div>`}const rendered={};function route(){const h=location.hash.replace(/^#/,"");if(DATE_RE.test(h)){location.replace("#/result/"+h);return}const[,view="",arg]=h.split("/");if(view==="result"&&DATE_RE.test(arg||"")){myResult.set(arg);location.replace("#/my");return}const name={"":"home",result:"result",my:"result",t:"type",codex:"codex",builder:"builder",about:"about",privacy:"privacy"}[view]||"home";let scrolled=false,gaView=name,gaArg,gaKey;if(view==="my"){const mine=myResult.get();if(mine){renderResult(mine);gaKey="#/my|"+mine}else{renderNoResult();gaView="result-empty"}}else if(name==="result")renderResult(arg||"");else if(name==="type"){gaArg=renderType(arg||"");if(!gaArg)gaView="type-unknown"}else if(name==="codex"){renderCodex(arg);scrolled=!!arg;rendered.codex=true;gaArg=arg}else if(!rendered[name]){({home:renderHome,builder:renderBuilder,about:renderAbout,privacy:renderPrivacy})[name]();rendered[name]=true}document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+name));const navName=name==="result"?"home":name;document.querySelectorAll("[data-nav]").forEach(a=>{if(a.dataset.nav===navName)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});document.title={result:"풀이 결과 · 공수명리학",type:"유형 소개 · 공수명리학",privacy:"개인정보 처리방침 · 공수명리학"}[name]||"공수명리학";ga("page",gaView,gaArg,gaKey);if(!scrolled)window.scrollTo({top:0,behavior:"instant"});else setTimeout(()=>{const el=document.querySelector(".attr-card.focus");if(el)el.scrollIntoView({block:"center",behavior:"instant"})},0)}if("scrollRestoration"in history)history.scrollRestoration="manual";renderFooter();window.addEventListener("hashchange",route);route()})();
+    </div>`}const rendered={};function route(){const h=location.hash.replace(/^#/,"");if(DATE_RE.test(h)){location.replace("#/result/"+h);return}const[,view="",arg,sub]=h.split("/");if(view==="result"&&DATE_RE.test(arg||"")){myResult.set(arg);location.replace("#/my");return}const name={"":"home",result:"result",my:"result",t:"type",codex:"codex",builder:"builder",about:"about",privacy:"privacy",ideal:"ideal"}[view]||"home";let scrolled=false,gaView=name,gaArg,gaKey;if(view==="my"){const mine=myResult.get();if(mine){renderResult(mine);gaKey="#/my|"+mine}else{renderNoResult();gaView="result-empty"}}else if(name==="result")renderResult(arg||"");else if(name==="type"){gaArg=renderType(arg||"");if(!gaArg)gaView="type-unknown"}else if(name==="codex"){renderCodex(arg);scrolled=!!arg;rendered.codex=true;gaArg=arg}else if(name==="ideal")gaArg=renderIdeal(arg||"",sub);else if(!rendered[name]){({home:renderHome,builder:renderBuilder,about:renderAbout,privacy:renderPrivacy})[name]();rendered[name]=true}document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id==="view-"+name));const navName=name==="result"?"home":name;document.querySelectorAll("[data-nav]").forEach(a=>{if(a.dataset.nav===navName)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});document.title={result:"풀이 결과 · 공수명리학",type:"유형 소개 · 공수명리학",privacy:"개인정보 처리방침 · 공수명리학",ideal:"이상형 만나기 · 공수명리학"}[name]||"공수명리학";ga("page",gaView,gaArg,gaKey);if(!scrolled)window.scrollTo({top:0,behavior:"instant"});else setTimeout(()=>{const el=document.querySelector(".attr-card.focus");if(el)el.scrollIntoView({block:"center",behavior:"instant"})},0)}if("scrollRestoration"in history)history.scrollRestoration="manual";renderFooter();window.addEventListener("hashchange",route);route()})();

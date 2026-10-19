@@ -1,0 +1,54 @@
+.ip-main { padding-top: 34px; padding-bottom: 60px; }
+.ip-controls { display: grid; grid-template-columns: 1.05fr 1.4fr 1fr 1fr; gap: 20px; padding: 20px; }
+.ip-controls[hidden], .ip-result[hidden] { display: none; }
+.ip-controls fieldset { margin: 0; padding: 0; min-width: 0; border: 0; }
+.ip-controls label, .ip-controls legend { font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--ink-dim); letter-spacing: .02em; }
+.ip-controls legend { padding: 0; margin-bottom: 8px; }
+.ip-controls select { display: block; width: 100%; min-height: 46px; margin-top: 8px; padding: 8px 12px; border: 1px solid var(--gold-faint); border-radius: 8px; background: var(--navy-950); color: var(--ink); font: inherit; }
+.ip-seg { display: flex; gap: 6px; }
+.ip-seg button { flex: 1; min-height: 46px; border: 1px solid var(--gold-faint); border-radius: 8px; background: var(--navy-950); color: var(--ink-dim); font: inherit; cursor: pointer; }
+.ip-seg button[aria-pressed="true"] { background: linear-gradient(135deg, var(--gold-light), var(--gold)); color: var(--purple-900); border-color: var(--gold); font-weight: 700; }
+.ip-result { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 44px; align-items: center; }
+.ip-figure { margin: 0; min-width: 0; }
+.ip-art { aspect-ratio: 3 / 4; width: 100%; background: var(--navy-950); border-radius: 10px; overflow: hidden; display: grid; place-items: center; position: relative; box-shadow: 0 0 0 1px var(--line-soft), 0 16px 36px -24px rgba(0,0,0,.8); }
+.ip-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.ip-loading, .ip-empty { padding: 20px; text-align: center; color: var(--ink-dim); }
+.ip-loading { position: absolute; }
+.ip-art img { z-index: 1; }
+.ip-info #ip-retry[hidden] { display: none; }
+.ip-figure figcaption { color: var(--ink-faint); font-size: 11.5px; line-height: 1.6; margin-top: 10px; }
+.ip-info { min-width: 0; }
+.ip-tags { color: var(--ink-dim); font-size: 14px; margin: 0 0 20px; letter-spacing: .02em; }
+#ip-summary { margin: 4px 0 24px; line-height: 1.7; }
+.ip-info #ip-summary { font-family: var(--sans); font-size: 15px; line-height: 1.75; color: var(--ink-dim); margin-bottom: 16px; }
+.ip-quote { margin: 0; padding: 18px 20px 16px; }
+.ip-quote[hidden] { display: none; }
+.ip-quote .hm-label { justify-content: flex-start; font-size: 12px; margin-bottom: 8px; }
+.ip-quote .hm-line { font-size: clamp(20px, 2.2vw, 25px); line-height: 1.6; text-align: left; white-space: normal; overflow-wrap: anywhere; }
+.ip-availability { color: var(--ink-dim); font-size: 14px; margin: 20px 0; }
+.ip-info .result-title { margin: 6px 0 14px; }
+#ip-title:focus, #ip-story-title:focus { outline: none; }
+#ip-talk { white-space: normal; }
+.ip-local-note { font-size: 13px; color: var(--ink-dim); line-height: 1.7; }
+#ip-reveal-actions { margin: 24px 0 32px; text-align: center; }
+.ip-result, .ip-story { scroll-margin-top: 84px; }
+.ip-story { margin-top: 30px; }
+.ip-story .ip-story-out { scroll-margin-top: 84px; outline: none; }
+.ip-inline-loading { padding: 32px 16px; display: grid; place-items: center; text-align: center; color: var(--gold-light); }
+.ip-inline-loading .orb { width: 88px; height: 88px; }
+.ip-inline-loading .orb svg { width: 100%; height: 100%; animation: spin 3s linear infinite; }
+.ip-inline-loading p { font-family: var(--serif); }
+#ip-overlay[hidden] { display: none; }
+#ip-overlay .orb { position: relative; margin: auto; }
+#ip-overlay .orb span { position: absolute; inset: 0; display: grid; place-items: center; font: 700 32px var(--serif); color: var(--gold-light); }
+#ip-overlay p { letter-spacing: .04em; }
+@media (prefers-reduced-motion: reduce) { #ip-overlay .orb svg { animation: none; } #ip-overlay { transition: none; } }
+.ip-local-note { margin-top: 22px; }
+@media (max-width: 640px) {
+  .ip-main { padding-top: 22px; }
+  .ip-controls { grid-template-columns: 1fr; gap: 16px; padding: 16px; }
+  .ip-result { grid-template-columns: minmax(0, 1fr); gap: 22px; padding: 20px 18px; }
+  .ip-figure { width: 100%; max-width: 390px; margin: 0 auto; }
+  .ip-quote { padding: 16px 18px; text-align: left; }
+  .ip-quote .hm-line { font-size: 20px; }
+}

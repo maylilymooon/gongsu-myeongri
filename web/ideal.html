@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>이상형 만들기 · 공수명리학</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="result.css?v=1.11-story-heading">
+  <link rel="stylesheet" href="ideal-preview.css?v=1.11-service">
+</head>
+<body class="ideal-preview-page" data-ideal-page="public" data-ideal-stories="v3">
+  <header class="site-header"><div class="container">
+    <a class="logo" href="index.html#/"><span class="logo-mark" aria-hidden="true">命</span><span class="logo-text">공수명리학<small>攻受命理學</small></span></a>
+    <nav class="site-nav" aria-label="주 메뉴"><a href="index.html#/">공수 풀이</a><a href="index.html#/codex">속성 도감</a><a href="ideal.html" aria-current="page">이상형 만들기</a><a href="index.html#/about">풀이 원리</a></nav>
+  </div></header>
+  <main class="container ip-main">
+    <div id="ip-heading"><p class="eyebrow">理想</p>
+    <h1 class="section-title">이상형 만들기</h1>
+    <p class="section-lead">마음이 가는 성격과 외형을 고른 뒤, 당신의 이상형을 만나보세요.</p></div>
+    <form id="ip-controls" class="ip-controls panel" aria-label="캐릭터 선택" hidden>
+      <fieldset><legend>① 공 / 수</legend><div class="ip-seg" id="ip-position">
+        <button type="button" data-side="gong" aria-pressed="true">공</button>
+        <button type="button" data-side="su" aria-pressed="false">수</button>
+      </div></fieldset>
+      <label for="ip-personality">② 성격<select id="ip-personality" name="personality"></select></label>
+      <label for="ip-type">③ 외형<select id="ip-type" name="type">
+        <option value="minam">미남</option><option value="miin">미인</option><option value="tteokdae">떡대</option>
+      </select></label>
+      <label for="ip-detail">④ 디테일<select id="ip-detail" name="detail">
+        <option value="base">기본형</option><option value="glasses">안경</option><option value="long">장발</option>
+      </select></label>
+    </form>
+    <div id="ip-reveal-actions" hidden><button type="button" class="btn btn-gold" id="ip-reveal">이상형 보기</button></div>
+    <section class="ip-result panel" id="ip-result" aria-labelledby="ip-title" hidden>
+      <figure class="ip-figure"><div class="ip-art" id="ip-art" aria-busy="false"></div><figcaption id="ip-credit">AI 생성 일러스트</figcaption></figure>
+      <div class="ip-info type-page">
+        <p class="result-meta">당신이 고른 이상형</p><h2 class="result-title" id="ip-title" tabindex="-1"></h2>
+        <p class="ip-tags" id="ip-tags"></p><p class="type-sum" id="ip-summary"></p>
+        <figure class="honmyeong ip-quote" id="ip-quote" hidden>
+          <figcaption class="hm-label"><span class="hm-hanja">本命臺詞</span> · 대표 대사</figcaption>
+          <blockquote class="hm-line" id="ip-quote-line"></blockquote>
+        </figure>
+        <p class="ip-availability" id="ip-availability" role="status"></p><button type="button" class="btn btn-ghost" id="ip-retry" hidden>이미지 다시 불러오기</button>
+        <div class="conversation-actions"><button type="button" class="btn btn-gold conversation-jump" id="ip-talk" aria-controls="ip-story" aria-expanded="false">이 캐릭터와 이야기하기 <span aria-hidden="true">↓</span></button></div>
+      </div>
+    </section>
+    <section class="ip-story story" id="ip-story" hidden aria-labelledby="ip-story-title">
+      <p class="story-kicker">이상형과 이야기하기</p>
+      <h2 class="story-title" id="ip-story-title" tabindex="-1"></h2>
+      <p class="story-cast" id="ip-story-details"></p>
+      <div id="ip-story-body"></div>
+    </section>
+
+    <noscript>미리보기를 사용하려면 JavaScript를 켜 주세요.</noscript>
+  </main>
+  <div class="ip-inline-loading" id="ip-overlay" hidden role="status" aria-live="polite"><div>
+    <div class="orb" aria-hidden="true"><svg viewBox="0 0 140 140" fill="none" stroke="#d7bf8a"><circle cx="70" cy="70" r="65"/><circle cx="70" cy="70" r="53" stroke-dasharray="2 6"/><path d="M70 25 115 70 70 115 25 70Z"/><circle cx="70" cy="70" r="32"/></svg><span>命</span></div>
+    <p>고른 이상형을 만나볼까요?</p>
+  </div></div>
+  <script src="data.js"></script>
+  <script src="ideal-images-data.js"></script>
+  <script src="ideal-images.js"></script>
+  <script src="ideal-preview-content.js"></script>
+  <script src="ideal-preview-stories.js"></script>
+  <script src="ideal-character-stories.js?v=1.11-story6-review"></script>
+  <script src="ideal-remaining-stories.js?v=1.11-story32"></script>
+  <script src="ideal-pilot-v3-data.js?v=1.11-pilot-v3"></script>
+  <script src="ideal-pilot-v3.js?v=1.11-pilot-v3"></script>
+  <script src="ideal-preview.js?v=1.11-story-heading"></script>
+</body>
+</html>
