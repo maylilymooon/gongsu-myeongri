@@ -1,4 +1,4 @@
-(function(root){"use strict";const OWNER={effectiveDate:"2026년 10월 15일",operator:"Maylily Moon",contactEmail:"maylilymooon@gmail.com",gaRetention:{event:"2개월",user:"14개월",resetOnNewActivity:true}};const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);const table=(head,rows)=>`<div class="pv-table"><table><thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;function tail(){const contact=OWNER.contactEmail?`<a href="mailto:${esc(OWNER.contactEmail)}">${esc(OWNER.contactEmail)}</a>`:"아래 개인정보 침해 상담 기관";const parts=[["이용자의 권리와 행사 방법",`<ul>
+(function(root){"use strict";const OWNER={effectiveDate:"2026년 10월 19일",history:[["","방문 통계 처리 항목에 이상형 만들기 이용 기록과 이상형 선택값을 추가했습니다. 이전 안내에 동의한 분께는 바뀐 항목을 알리고 다시 동의를 받습니다."],["2026년 10월 15일","최초 시행"]],operator:"Maylily Moon",contactEmail:"maylilymooon@gmail.com",gaRetention:{event:"2개월",user:"14개월",resetOnNewActivity:true}};const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);const table=(head,rows)=>`<div class="pv-table"><table><thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;function tail(){const contact=OWNER.contactEmail?`<a href="mailto:${esc(OWNER.contactEmail)}">${esc(OWNER.contactEmail)}</a>`:"아래 개인정보 침해 상담 기관";const parts=[["이용자의 권리와 행사 방법",`<ul>
           <li>이용자(만 14세 미만 아동의 경우 법정대리인 포함)는 언제든지 자신의 개인정보에 대해 열람, 정정·삭제, 처리정지를 요구하거나 동의를 철회할 수 있습니다.</li>
           <li>방문 통계 동의는 화면 맨 아래 <b>'쿠키·방문 통계 설정'</b>에서 바로 철회할 수 있습니다.</li>
           <li>그 밖의 요청은 ${contact}로 보내 주시면 확인한 뒤 지체 없이 답변드립니다.</li>
@@ -12,7 +12,7 @@
           <li>생년월일은 이용자의 기기 안에서 결과 계산에만 쓰며, 운영자 서버나 Google Analytics로 보내지 않습니다.</li>
           <li>방문 통계에는 생년월일이 없는 화면 주소와 최소한의 이용 기록만 보내고, 광고 관련 기능은 사용하지 않습니다.</li>
           <li>사이트는 HTTPS(암호화 통신)로 제공됩니다.</li>
-        </ul>`]];if(OWNER.contactEmail)parts.push(["개인정보 보호책임자·문의",`<p>${esc(OWNER.operator||"운영자")} · ${contact}</p>`]);parts.push(["개인정보 침해 상담",`<p>개인정보 침해에 관한 상담은 개인정보침해신고센터(<a href="https://privacy.kisa.or.kr" target="_blank" rel="noopener">privacy.kisa.or.kr</a>, 국번 없이 118)에 문의할 수 있습니다.</p>`]);return parts.map(([h,body],i)=>`<section class="panel pv-sec">
+        </ul>`]];if(OWNER.contactEmail)parts.push(["개인정보 보호책임자·문의",`<p>${esc(OWNER.operator||"운영자")} · ${contact}</p>`]);parts.push(["개인정보 침해 상담",`<p>개인정보 침해에 관한 상담은 개인정보침해신고센터(<a href="https://privacy.kisa.or.kr" target="_blank" rel="noopener">privacy.kisa.or.kr</a>, 국번 없이 118)에 문의할 수 있습니다.</p>`]);if(OWNER.history&&OWNER.history.length)parts.push(["변경 이력",`<ul>${OWNER.history.map(([d,t])=>`<li><b>${esc(d||OWNER.effectiveDate)}</b> · ${esc(t)}</li>`).join("")}</ul>`]);return parts.map(([h,body],i)=>`<section class="panel pv-sec">
         <h2>${6+i}. ${h}</h2>
         ${body}
       </section>`).join("\n")}function html(){const R=OWNER.gaRetention;const retention=R?`<ul>
@@ -41,10 +41,10 @@
         <h2>2. 방문 통계 (Google Analytics 4) — 동의한 경우에만</h2>
         <p>서비스 개선을 위해 Google LLC의 Google Analytics 4를 사용합니다. 화면 하단 안내에서 <b>'동의'를 선택한 경우에만</b> 동작하며, 동의하지 않으면 Google Analytics로 어떤 정보도 전송하지 않습니다.</p>
         <h3>처리 항목</h3>
-        ${table(["구분","항목"],[["본 화면","생년월일을 뺀 화면 주소(예: 첫 화면, 결과 화면, 유형 소개, 속성 도감), 화면 제목"],["이용 기록","테스트 시작, 결과 보기, 상황극 선택과 결말 확인, 카드 저장, 공유하기, 내 유형 링크 복사, 다시 하기"],["결과 유형","공·수·리버스 구분, 메인 유형(예: 외유내강수), 운명의 상대 유형, 상황극 선택지 번호"],["유입 정보","들어온 외부 사이트의 도메인(예: instagram.com), 유입 캠페인 표시(utm)"],["자동 수집","방문자를 구분하는 임의의 번호(쿠키), 기기·브라우저·운영체제 종류, 언어, 대략적인 지역, 방문 시각, 페이지 스크롤, 외부 링크 클릭(링크 주소) 등 Google Analytics가 자동으로 수집하는 정보. 화면 크기 등 일부 기기 정보는 Google Analytics 설정에 따라 수집되지 않을 수 있습니다."]])}
-        <p><b>보내지 않는 정보:</b> 생년월일, 생년월일이 든 주소, 세부 속성, 이름, 연락처</p>
+        ${table(["구분","항목"],[["본 화면","생년월일을 뺀 화면 주소(예: 첫 화면, 결과 화면, 유형 소개, 속성 도감, 이상형 만들기), 화면 제목"],["이용 기록","테스트 시작, 결과 보기, 이상형 만들기 시작, 이상형 결과 보기, 상황극 시작·선택과 결말 확인(사주 결과와 이상형 만들기의 상황극), 카드 저장, 공유하기, 내 유형 링크 복사, 다시 하기"],["결과 유형","공·수·리버스 구분, 메인 유형(예: 외유내강수), 운명의 상대 유형, 상황극 선택지 번호"],["이상형 선택","이상형 만들기에서 고른 성격 유형(예: 능글공), 공·수 구분, 외형(미남·미인·떡대), 디테일(기본형·안경·장발), 상황극 구분과 상황극 번호, 고른 선택지(A·B·C)와 같은 상황극에서 몇 번째 선택인지"],["유입 정보","들어온 외부 사이트의 도메인(예: instagram.com), 유입 캠페인 표시(utm)"],["자동 수집","방문자를 구분하는 임의의 번호(쿠키), 기기·브라우저·운영체제 종류, 언어, 대략적인 지역, 방문 시각, 페이지 스크롤, 외부 링크 클릭(링크 주소) 등 Google Analytics가 자동으로 수집하는 정보. 화면 크기 등 일부 기기 정보는 Google Analytics 설정에 따라 수집되지 않을 수 있습니다."]])}
+        <p><b>보내지 않는 정보:</b> 생년월일, 생년월일이 든 주소, 세부 속성(사주 결과의 보조속성), 이상형 선택값이 든 주소, 이름, 연락처</p>
         <h3>목적</h3>
-        <p>방문자 수와 유입 경로 파악, 기능별 이용률과 유형별 결과 분포 분석을 통한 서비스 개선. 광고·맞춤형 광고·개인 식별에는 사용하지 않으며, 광고 저장·광고 개인화·Google 신호 기능은 꺼져 있습니다.</p>
+        <p>방문자 수와 유입 경로 파악, 기능별 이용률과 유형별 결과 분포 분석, 이상형 선택 경향과 상황극 선택 분석을 통한 서비스·콘텐츠 개선. 광고·맞춤형 광고·개인 식별에는 사용하지 않으며, 광고 저장·광고 개인화·Google 신호 기능은 꺼져 있습니다.</p>
         <h3>보관 기간</h3>
         ${retention}
         <h3>국외 이전 (방문 통계 데이터)</h3>
