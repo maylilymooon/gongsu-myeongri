@@ -1,4 +1,4 @@
-(function(root){"use strict";const OWNER={effectiveDate:"2026년 10월 19일",history:[["","방문 통계 처리 항목에 이상형 만들기 이용 기록과 이상형 선택값을 추가했습니다. 이전 안내에 동의한 분께는 바뀐 항목을 알리고 다시 동의를 받습니다."],["2026년 10월 15일","최초 시행"]],operator:"Maylily Moon",contactEmail:"maylilymooon@gmail.com",gaRetention:{event:"2개월",user:"14개월",resetOnNewActivity:true}};const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);const table=(head,rows)=>`<div class="pv-table"><table><thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;function tail(){const contact=OWNER.contactEmail?`<a href="mailto:${esc(OWNER.contactEmail)}">${esc(OWNER.contactEmail)}</a>`:"아래 개인정보 침해 상담 기관";const parts=[["이용자의 권리와 행사 방법",`<ul>
+(function(root){"use strict";const OWNER={effectiveDate:"2026년 10월 26일",history:[["","캐릭터 카드에서 보조속성과 적합도를 빼고, 결과 화면의 생년월일을 기본으로 가리도록 바꿨습니다. 카드에 남는 본명 대사로 생년월일 후보가 좁혀질 수 있는 경우를 1항에 안내했습니다."],["2026년 10월 19일","방문 통계 처리 항목에 이상형 만들기 이용 기록과 이상형 선택값을 추가했습니다. 이전 안내에 동의한 분께는 바뀐 항목을 알리고 다시 동의를 받습니다."],["2026년 10월 15일","최초 시행"]],operator:"Maylily Moon",contactEmail:"maylilymooon@gmail.com",gaRetention:{event:"2개월",user:"14개월",resetOnNewActivity:true}};const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);const table=(head,rows)=>`<div class="pv-table"><table><thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;function tail(){const contact=OWNER.contactEmail?`<a href="mailto:${esc(OWNER.contactEmail)}">${esc(OWNER.contactEmail)}</a>`:"아래 개인정보 침해 상담 기관";const parts=[["이용자의 권리와 행사 방법",`<ul>
           <li>이용자(만 14세 미만 아동의 경우 법정대리인 포함)는 언제든지 자신의 개인정보에 대해 열람, 정정·삭제, 처리정지를 요구하거나 동의를 철회할 수 있습니다.</li>
           <li>방문 통계 동의는 화면 맨 아래 <b>'쿠키·방문 통계 설정'</b>에서 바로 철회할 수 있습니다.</li>
           <li>그 밖의 요청은 ${contact}로 보내 주시면 확인한 뒤 지체 없이 답변드립니다.</li>
@@ -33,7 +33,8 @@
           <li>결과를 다시 볼 수 있도록 생년월일을 <b>지금 사용 중인 브라우저 탭에만</b> 임시로 저장하며, 탭을 닫으면 지워집니다.</li>
           <li><b>'내 유형 링크 복사'</b>로 복사되는 링크와 <b>'공유하기'</b>로 보내는 링크에는 생년월일이 들어 있지 않습니다. 링크를 받은 사람에게는 유형 소개만 보입니다.</li>
           <li>예전에 복사한 결과 링크(주소 끝이 <code>#/result/연-월-일</code> 형식)에는 생년월일이 들어 있어, 받은 사람이 볼 수 있습니다. 주소의 <code>#</code> 뒷부분은 브라우저가 서버로 보내지 않으므로 운영자에게는 전달되지 않습니다.</li>
-          <li><b>캐릭터 카드 이미지</b>는 이용자의 브라우저에서 만들어지며 서버로 전송되지 않습니다. 카드에는 유형명(보조속성 포함)과 적합도가 표시되며, 계산 규칙이 공개되어 있어 이 조합으로 생년월일이 추정될 수 있습니다. 카드를 공유할 때 참고해 주세요.</li>
+          <li><b>캐릭터 카드 이미지</b>는 이용자의 브라우저에서 만들어지며 서버로 전송되지 않습니다. 카드에는 성격 유형과 공·수 구분, 결과 화면의 본명 대사가 표시되며 생년월일·보조속성·적합도는 담기지 않습니다. 다만 일부 본명 대사는 보조속성 조합에 따라 정해지므로, 그런 대사가 담긴 카드는 계산 규칙으로 생년월일 후보를 좁힐 수 있습니다(1930~2026년 기준 최소 78개 날짜, 받는 사람이 나이대를 알면 몇 개 날짜까지). 해당하는 경우 카드를 만들 때 따로 안내합니다.</li>
+          <li><b>결과 화면</b>의 생년월일은 기본으로 가려져 있고, '생년월일 보기'를 눌러야 보입니다. 다만 결과 화면에는 세부 속성·적합도·명식(연·월·일 간지)이 표시되며, 계산 규칙이 공개되어 있어 결과 화면을 통째로 캡처해 공유하면 이 정보로 생년월일이 추정될 수 있습니다. 공유할 때는 캐릭터 카드나 '내 유형 링크 복사'를 이용해 주세요.</li>
         </ul>
       </section>
 

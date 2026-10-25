@@ -526,3 +526,9 @@ html.sc-lock, html.sc-lock body { overflow: hidden; }
 @media (max-width: 520px) { .result-hero.is-reverse .hero-card { max-width: 340px; } }
 /* 이동 후 제목에 준 초점은 화면 낭독기용 — 마우스·터치로 왔을 때 테두리는 숨김 */
 .story-title[tabindex="-1"]:focus:not(:focus-visible), #r-match h2[tabindex="-1"]:focus:not(:focus-visible) { outline: none; }
+/* 생년월일 가림 버튼 — 결과 화면을 캡처해도 생년월일이 바로 보이지 않게 기본은 가리고, 눌러야 보인다 */
+.birth-toggle { padding: 0; border: 0; background: none; font: inherit; color: var(--ink-faint); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.birth-toggle:hover { color: var(--ink-dim); }
+.birth-toggle[aria-expanded="true"] { margin-right: 8px; }
+.birth-secret[hidden] { display: none; }
+.sc-note-warn { color: var(--gold-light); }
